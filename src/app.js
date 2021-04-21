@@ -20,7 +20,7 @@ app.use(express.static(publicDirectorypath));
 app.get('/', (req, res) => {
     axios.get('https://data.gov.gr/api/v1/query/mdg_emvolio', {
         headers: {
-            'Authorization': `Token ${process.env.API_TOKEN}`
+            'Authorization': `Token ${process.env.api_token}`
         },
     })
         .then((response) => {
