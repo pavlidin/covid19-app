@@ -38,6 +38,20 @@ app.get('/', (req, res) => {
         })
 })
 
+app.get('/data', (req, res) => {
+    axios.get('https://data.gov.gr/api/v1/query/mdg_emvolio', {
+        headers: {
+            'Authorization': `Token ${process.env.api_token}`
+        },
+    })
+        .then((response) => {
+            res.jsonp(response.data)
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+})
+
 app.listen(port, () => {
     console.log(`Server is up on port ${port}.`);
 });
