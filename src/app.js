@@ -25,9 +25,6 @@ app.get('/', (req, res) => {
     })
         .then((response) => {
             const jsonArr = response.data;
-            
-
-
             const uniqueAreas = getUniqueAreas(response.data);
 
             res.render('index', {
