@@ -93,7 +93,7 @@ app.get('/totaltopareas', (req, res) => {
 
             const populationData = getPopulationData(response.data, populationJSON);
 
-            const vaccinatedAreas = getVaccinatedAreas(populationData, number, 'asc');
+            const vaccinatedAreas = getVaccinatedAreas(populationData, number, 'desc');
 
             res.render('totaltopareas', {
                 title: `${number} Most Vaccinated Areas in Greece (per 100k people)`,
@@ -118,7 +118,7 @@ app.get('/totalleastareas', (req, res) => {
 
             const populationData = getPopulationData(response.data, populationJSON);
 
-            const vaccinatedAreas = getVaccinatedAreas(populationData, number, 'desc');
+            const vaccinatedAreas = getVaccinatedAreas(populationData, number, 'asc');
 
             res.render('totalleastareas', {
                 title: `${number} Least Vaccinated Areas in Greece (per 100k people)`,
