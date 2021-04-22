@@ -48,10 +48,7 @@ app.get('/latest', (req, res) => {
         },
     })
         .then((response) => {
-            res.render('latest', {
-                title: 'Latest Vaccinations in Greece',
-                data: response.data
-            })
+            res.jsonp(response.data);
         })
         .catch((error) => {
             console.error(error)
