@@ -5,7 +5,7 @@ const axios = require('axios');
 const fs = require('fs');
 const publicDirectorypath = path.join(__dirname, '../public');
 const getUniqueAreas = require('./utils/getUniqueAreas');
-const getToday = require('./utils/getToday');
+const getLatest = require('./utils/getLatest');
 const getPopulationData = require('./utils/getPopulationData');
 const getTopVaccinatedAreas = require('./utils/getTopVaccinatedAreas');
 
@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/latest', (req, res) => {
-    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getToday()}`, {
+    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getLatest()}`, {
         headers: {
             'Authorization': `Token ${process.env.api_token}`
         },
@@ -56,7 +56,7 @@ app.get('/latest', (req, res) => {
 })
 
 app.get('/latesttopareas', (req, res) => {
-    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getToday()}`, {
+    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getLatest()}`, {
         headers: {
             'Authorization': `Token ${process.env.api_token}`
         },
@@ -81,7 +81,7 @@ app.get('/latesttopareas', (req, res) => {
 })
 
 app.get('/totaltopareas', (req, res) => {
-    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getToday()}`, {
+    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getLatest()}`, {
         headers: {
             'Authorization': `Token ${process.env.api_token}`
         },
