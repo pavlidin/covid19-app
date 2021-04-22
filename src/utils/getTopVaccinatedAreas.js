@@ -1,10 +1,10 @@
-const getTopVaccinatedAreas = (data, number, time) => {
+const getTopVaccinatedAreas = (data, limit, time) => {
     if (time === 'latest') {
         data.sort(GetSortOrder("vaccinationsper100k-latest")); 
     } else {
         data.sort(GetSortOrder("vaccinationsper100k-total")); 
     }
-    return data.slice(-number);
+    return data.slice(-limit);
 }
 
 //Comparer Function
