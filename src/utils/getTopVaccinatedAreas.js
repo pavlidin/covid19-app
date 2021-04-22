@@ -1,6 +1,6 @@
 const getTopVaccinatedAreas = (data, number, time) => {
-    if (time === 'today') {
-        data.sort(GetSortOrder("vaccinationsper100k-today")); 
+    if (time === 'latest') {
+        data.sort(GetSortOrder("vaccinationsper100k-latest")); 
     } else {
         data.sort(GetSortOrder("vaccinationsper100k-total")); 
     }

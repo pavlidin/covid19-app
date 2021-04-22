@@ -74,7 +74,7 @@ app.get('/latesttopareas', (req, res) => {
             //     data: topAreas
             // })
 
-            const topVaccinatedAreas = getTopVaccinatedAreas(populationData, 5, 'today');
+            const topVaccinatedAreas = getTopVaccinatedAreas(populationData, 5, 'latest');
 
             res.jsonp(topVaccinatedAreas);
         })
@@ -83,7 +83,7 @@ app.get('/latesttopareas', (req, res) => {
         })
 })
 
-app.get('/topareas', (req, res) => {
+app.get('/totaltopareas', (req, res) => {
     axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getToday()}`, {
         headers: {
             'Authorization': `Token ${process.env.api_token}`
