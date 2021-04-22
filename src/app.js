@@ -2,8 +2,12 @@ const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
 const axios = require('axios');
+const fs = require('fs');
 const publicDirectorypath = path.join(__dirname, '../public');
 const getUniqueAreas = require('./utils/getUniqueAreas');
+const getToday = require('./utils/getToday');
+const getPopulationData = require('./utils/getPopulationData');
+const getTopVaccinatedAreas = require('./utils/getTopVaccinatedAreas');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,13 +28,12 @@ app.get('/', (req, res) => {
         },
     })
         .then((response) => {
-            const jsonArr = response.data;
             const uniqueAreas = getUniqueAreas(response.data);
 
             res.render('index', {
                 title: 'Covid Vaccinations in Greece',
                 uniqueAreas,
-                jsonArray: JSON.stringify(jsonArr)
+                data: JSON.stringify(response.data)
             });
         })
         .catch((error) => {
@@ -38,14 +41,67 @@ app.get('/', (req, res) => {
         })
 })
 
-app.get('/data', (req, res) => {
-    axios.get('https://data.gov.gr/api/v1/query/mdg_emvolio', {
+app.get('/latest', (req, res) => {
+    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getToday()}`, {
         headers: {
             'Authorization': `Token ${process.env.api_token}`
         },
     })
         .then((response) => {
-            res.jsonp(response.data)
+            res.render('latest', {
+                title: 'Latest Vaccinations in Greece',
+                data: response.data
+            })
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+})
+
+app.get('/latesttopareas', (req, res) => {
+    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getToday()}`, {
+        headers: {
+            'Authorization': `Token ${process.env.api_token}`
+        },
+    })
+        .then((response) => {
+            const rawPopulationData = fs.readFileSync('./src/utils/populationData.json');
+            const populationJSON = JSON.parse(rawPopulationData);
+
+            const populationData = getPopulationData(response.data, populationJSON);
+            // res.render('topareas', {
+            //     title: 'Latest Top 5 areas Vaccinated (per 100k people)',
+            //     data: topAreas
+            // })
+
+            const topVaccinatedAreas = getTopVaccinatedAreas(populationData, 5, 'today');
+
+            res.jsonp(topVaccinatedAreas);
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+})
+
+app.get('/topareas', (req, res) => {
+    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getToday()}`, {
+        headers: {
+            'Authorization': `Token ${process.env.api_token}`
+        },
+    })
+        .then((response) => {
+            const rawPopulationData = fs.readFileSync('./src/utils/populationData.json');
+            const populationJSON = JSON.parse(rawPopulationData);
+
+            const populationData = getPopulationData(response.data, populationJSON);
+            // res.render('topareas', {
+            //     title: 'Top 5 areas Vaccinated in Total (per 100k people)',
+            //     data: topAreas
+            // })
+
+            const topVaccinatedAreas = getTopVaccinatedAreas(populationData, 5);
+
+            res.jsonp(topVaccinatedAreas);
         })
         .catch((error) => {
             console.error(error)
