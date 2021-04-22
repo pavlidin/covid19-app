@@ -62,7 +62,7 @@ app.get('/latesttopareas', (req, res) => {
         },
     })
         .then((response) => {
-            const rawPopulationData = fs.readFileSync('./src/utils/populationData.json');
+            const rawPopulationData = fs.readFileSync(path.resolve(__dirname, './utils/populationData.json'));
             const populationJSON = JSON.parse(rawPopulationData);
 
             const populationData = getPopulationData(response.data, populationJSON);
@@ -87,7 +87,7 @@ app.get('/totaltopareas', (req, res) => {
         },
     })
         .then((response) => {
-            const rawPopulationData = fs.readFileSync('./src/utils/populationData.json');
+            const rawPopulationData = fs.readFileSync(path.resolve(__dirname, './utils/populationData.json'));
             const populationJSON = JSON.parse(rawPopulationData);
 
             const populationData = getPopulationData(response.data, populationJSON);
