@@ -7,7 +7,7 @@ const publicDirectorypath = path.join(__dirname, '../public');
 const getUniqueAreas = require('./utils/getUniqueAreas');
 const getLatest = require('./utils/getLatest');
 const getPopulationData = require('./utils/getPopulationData');
-const getTopVaccinatedAreas = require('./utils/getTopVaccinatedAreas');
+const getVaccinatedAreas = require('./utils/getVaccinatedAreas');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -87,18 +87,44 @@ app.get('/totaltopareas', (req, res) => {
         },
     })
         .then((response) => {
+            const number = 5;
             const rawPopulationData = fs.readFileSync(path.resolve(__dirname, './utils/populationData.json'));
             const populationJSON = JSON.parse(rawPopulationData);
 
             const populationData = getPopulationData(response.data, populationJSON);
-            // res.render('topareas', {
-            //     title: 'Top 5 areas Vaccinated in Total (per 100k people)',
-            //     data: topAreas
-            // })
 
-            const topVaccinatedAreas = getTopVaccinatedAreas(populationData, 5);
+            const vaccinatedAreas = getVaccinatedAreas(populationData, number, 'asc');
 
-            res.jsonp(topVaccinatedAreas);
+            res.render('totaltopareas', {
+                title: `${number} Most Vaccinated Areas in Greece (per 100k people)`,
+                data: JSON.stringify(vaccinatedAreas)
+            })
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+})
+
+app.get('/totalleastareas', (req, res) => {
+    axios.get(`https://data.gov.gr/api/v1/query/mdg_emvolio?referencedate=${getLatest()}`, {
+        headers: {
+            'Authorization': `Token ${process.env.api_token}`
+        },
+    })
+        .then((response) => {
+            const number = 5;
+            const rawPopulationData = fs.readFileSync(path.resolve(__dirname, './utils/populationData.json'));
+            const populationJSON = JSON.parse(rawPopulationData);
+
+            const populationData = getPopulationData(response.data, populationJSON);
+
+            const vaccinatedAreas = getVaccinatedAreas(populationData, number, 'desc');
+
+            res.render('totalleastareas', {
+                title: `${number} Least Vaccinated Areas in Greece (per 100k people)`,
+                data: JSON.stringify(vaccinatedAreas)
+            })
+
         })
         .catch((error) => {
             console.error(error)
