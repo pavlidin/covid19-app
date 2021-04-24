@@ -66,12 +66,10 @@ app.get('/latesttopareas', (req, res) => {
             const populationJSON = JSON.parse(rawPopulationData);
 
             const populationData = getPopulationData(response.data, populationJSON);
-            // res.render('topareas', {
-            //     title: 'Latest Top 5 areas Vaccinated (per 100k people)',
-            //     data: topAreas
-            // })
+            console.log(populationData);
+            const topVaccinatedAreas = getVaccinatedAreas(populationData, 5, 'desc', 'latest');
 
-            const topVaccinatedAreas = getVaccinatedAreas(populationData, 5, 'latest');
+            console.log(topVaccinatedAreas);
 
             res.jsonp(topVaccinatedAreas);
         })
