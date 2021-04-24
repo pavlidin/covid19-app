@@ -71,7 +71,7 @@ app.get('/latesttopareas', (req, res) => {
             //     data: topAreas
             // })
 
-            const topVaccinatedAreas = getTopVaccinatedAreas(populationData, 5, 'latest');
+            const topVaccinatedAreas = getVaccinatedAreas(populationData, 5, 'latest');
 
             res.jsonp(topVaccinatedAreas);
         })
